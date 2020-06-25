@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="com.github.sarxos:v4l4j:0.9.1-r507" type="repository">
+    <properties maven-id="com.github.sarxos:v4l4j:0.9.1-r507" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/sarxos/v4l4j/0.9.1-r507/v4l4j-0.9.1-r507.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
