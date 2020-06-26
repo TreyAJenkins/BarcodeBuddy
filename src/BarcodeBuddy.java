@@ -1,3 +1,5 @@
+import GUI.Prompt;
+
 import java.util.ArrayList;
 
 public class BarcodeBuddy {
@@ -5,6 +7,7 @@ public class BarcodeBuddy {
     private static ArrayList<Location> locations = new ArrayList<>();
 
     private static void scanMode() {
+
         BarcodeScanner scanner = new BarcodeScanner();
         System.out.println("Please scan location barcode");
         // TODO: Wait for button press using GPIO
@@ -40,7 +43,11 @@ public class BarcodeBuddy {
     }
 
     public static void main(String[] args) {
-        scanMode();
+
+        Prompt prompt = new Prompt();
+        prompt.prompt("Please scan a location barcode", "Open scanner");
+        System.out.println("Return");
+        //scanMode();
     }
 
 }

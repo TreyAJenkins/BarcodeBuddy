@@ -11,5 +11,23 @@
     <orderEntry type="library" name="com.google.zxing:javase:3.4.0" level="project" />
     <orderEntry type="library" name="com.github.sarxos:webcam-capture-driver-v4l4j:0.3.12" level="project" />
     <orderEntry type="library" name="com.github.sarxos:v4l4j:0.9.1-r507" level="project" />
+    <orderEntry type="module-library" scope="RUNTIME">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/v4l4j-0.9.1-r507.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="RUNTIME">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/webcam-capture-driver-v4l4j-0.3.13-20200330.202521-6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

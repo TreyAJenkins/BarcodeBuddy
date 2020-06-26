@@ -13,8 +13,11 @@ import java.awt.image.BufferedImage;
 
 public class BarcodeScanner extends JFrame {
 
+
     static {
-        Webcam.setDriver(new V4l4jDriver()); // this is important
+        if (!System.getProperty("os.name").contains("Windows")) {
+            Webcam.setDriver(new V4l4jDriver()); // this is important
+        }
     }
 
     static boolean running = true;
@@ -30,7 +33,7 @@ public class BarcodeScanner extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Dimension size = WebcamResolution.QVGA.getSize();
-        webcam = Webcam.getWebcams().get(0);
+        webcam = Webcam.getDefault();
         webcam.setViewSize(size);
 
         panel = new WebcamPanel(webcam);
