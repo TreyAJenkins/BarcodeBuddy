@@ -1,7 +1,6 @@
 import GUI.EquipmentListing;
 import GUI.Prompt;
 
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 
 public class BarcodeBuddy {
