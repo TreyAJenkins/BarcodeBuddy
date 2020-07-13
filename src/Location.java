@@ -15,6 +15,10 @@ public class Location {
         return equipment;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
     public void addEquipment(Equipment equip) {
         equipment.add(equip);
     }

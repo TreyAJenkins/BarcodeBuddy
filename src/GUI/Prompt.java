@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Prompt extends JFrame {
 
     JFrame frame;
     private boolean buttonClicked = false;
+    private int buttonSelected = 0;
 
 
     public Prompt() {
@@ -93,8 +95,71 @@ public class Prompt extends JFrame {
         this.setVisible(false);
     }
 
+    public int menu(ArrayList<String> objects) {
+        buttonClicked = false;
+        buttonSelected = 0;
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+
+
+        int count = 0;
+
+        for (String text : objects) {
+            JButton button = new JButton(text);
+            GridBagConstraints gbc = new GridBagConstraints();
+
+            gbc.weighty = 1.0 / objects.size();
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.gridy = count;
+
+            // set size of button
+            button.setPreferredSize(new Dimension((int) (frame.getWidth() * 0.75), (int) (frame.getHeight() * gbc.weighty * 0.75)));
+
+
+            // Set button text size
+            Font buttonFont = button.getFont();
+            int stringWidth = button.getFontMetrics(buttonFont).stringWidth(text);
+            int componentWidth = (int) (frame.getWidth() * 0.75 * 0.5);
+            double widthRatio = (double)componentWidth / (double)stringWidth;
+            int newFontSize = (int)(buttonFont.getSize() * widthRatio);
+            button.setFont(new Font(buttonFont.getName(), Font.PLAIN, newFontSize));
+            button.setFocusPainted(false);
+
+            int finalCount = count;
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Prompt.this.buttonClicked = true;
+                    Prompt.this.buttonSelected = finalCount;
+                }
+            } );
+
+            panel.add(button, gbc);
+
+            count++;
+        }
+
+        frame.add(panel);
+        this.setVisible(true);
+
+
+
+        while (!buttonClicked) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        this.clear();
+        this.setVisible(false);
+
+        return buttonSelected;
+    }
+
     public void clear() {
-        frame.removeAll();
+        frame.getContentPane().removeAll();
     }
 
 }

@@ -15,7 +15,8 @@ public class BarcodeScanner extends JFrame {
 
 
     static {
-        if (!System.getProperty("os.name").contains("Windows")) {
+        System.out.println(System.getProperty("os.name"));
+        if (!System.getProperty("os.name").contains("Windows") && !System.getProperty("os.name").contains("Mac")) {
             Webcam.setDriver(new V4l4jDriver()); // this is important
         }
     }
