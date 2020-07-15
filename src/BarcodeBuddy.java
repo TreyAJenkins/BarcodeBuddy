@@ -82,7 +82,7 @@ public class BarcodeBuddy {
         equipmentListing.setLocation(location);
 
         for (int i = 0; i < 16; i++) {
-            location.addEquipment(new Equipment("Sample " + i, 0));
+            location.addEquipment(new Equipment("Sample " + i, i % 4));
         }
         equipmentListing.setVisible(true);
 

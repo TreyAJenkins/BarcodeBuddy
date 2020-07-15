@@ -1,3 +1,5 @@
+import com.sun.tools.javac.comp.Flow;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +14,6 @@ public class EquipmentListing extends JFrame {
 
     private Location location;
     int headerHeight;
-
 
     public EquipmentListing() {
         super();
@@ -29,12 +30,15 @@ public class EquipmentListing extends JFrame {
         frame.pack();
         frame.setLocationRelativeTo(null);
 
+        FlowLayout layout = new FlowLayout();
+        layout.setVgap(0);
         JPanel header = new JPanel();
+        header.setLayout(layout);
+        JButton scan = new JButton("Scan");
         JButton menu = new JButton("Main Menu");
-        JButton newLoction = new JButton("New Location");
         JButton undo = new JButton("Undo");
+        header.add(scan);
         header.add(menu);
-        header.add(newLoction);
         header.add(undo);
         frame.add(header);
         frame.setVisible(true);
@@ -54,20 +58,20 @@ public class EquipmentListing extends JFrame {
     private JPanel mkEquipPanel(Equipment equip) {
         JPanel currPanel = new JPanel();
         JButton currButton = new JButton(equip.toString());
-        currButton.setOpaque(true);
+        currPanel.setOpaque(true);
         //currButton.setBorderPainted(false);
         switch (equip.getType()) {
             case Equipment.NOT_SCANNED:
-                currButton.setBackground(Color.red);
+                currPanel.setBackground(Color.red);
                 break;
             case Equipment.GREEN:
-                currButton.setBackground(Color.GREEN);
+                currPanel.setBackground(Color.GREEN);
                 break;
             case Equipment.YELLOW:
-                currButton.setBackground(Color.YELLOW);
+                currPanel.setBackground(Color.YELLOW);
                 break;
             case Equipment.FLASHING_BLUE:
-                currButton.setBackground(Color.BLUE);
+                currPanel.setBackground(Color.BLUE);
                 break;
         }
 
@@ -77,6 +81,8 @@ public class EquipmentListing extends JFrame {
 
     public void setVisible(boolean visibility) {
         //frame.pack();
+        JLabel label = new JLabel(location.getLocation());
+        frame.add(label);
         ArrayList<Equipment> equipment = location.getEquipment();
         if (visibility) {
             JPanel panel = new JPanel();
