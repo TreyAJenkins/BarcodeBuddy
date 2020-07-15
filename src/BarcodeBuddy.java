@@ -1,12 +1,12 @@
-import GUI.EquipmentListing;
-import GUI.Prompt;
-
 import java.util.ArrayList;
 
 public class BarcodeBuddy {
 
     private static ArrayList<Location> locations = new ArrayList<>();
     private static boolean isRunning = true;
+    private static Prompt prompt;
+    private static EquipmentListing equipmentListing;
+
 
     private static void scanMode(Prompt prompt) {
         prompt.clear();
@@ -75,12 +75,14 @@ public class BarcodeBuddy {
 
     public static void main(String[] args) {
 
-        Prompt prompt = new Prompt();
-        EquipmentListing equipmentListing = new EquipmentListing("Location1");
+        prompt = new Prompt();
+        equipmentListing = new EquipmentListing();
 
+        Location location = new Location("Test Location");
+        equipmentListing.setLocation(location);
 
         for (int i = 0; i < 16; i++) {
-            equipmentListing.addEquipment("Sample " + i, 0);
+            location.addEquipment(new Equipment("Sample " + i, 0));
         }
         equipmentListing.setVisible(true);
 

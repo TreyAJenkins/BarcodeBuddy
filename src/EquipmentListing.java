@@ -1,5 +1,3 @@
-package GUI;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,25 +6,19 @@ import java.util.ArrayList;
 
 public class EquipmentListing extends JFrame {
 
-    private static final int DELETED = -1;
-    private static final int GREEN = 0;
-    private static final int YELLOW = 1;
-    private static final int FLASHING_BLUE = 2;
-
     JFrame frame;
     private boolean buttonClicked = false;
     private int buttonSelected = 0;
 
-    private String location;
-    private ArrayList<JPanel> equipment;
+    private Location location;
     int headerHeight;
 
 
-    public EquipmentListing(String location) {
+    public EquipmentListing() {
         super();
 
-        this.location = location;
-        this.equipment = new ArrayList<JPanel>();
+        //this.location = location;
+        //this.equipment = new ArrayList<JPanel>();
 
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,33 +43,41 @@ public class EquipmentListing extends JFrame {
 
     }
 
-    public int addEquipment(String name, int type) {
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Location getCurrentLocation() {
+        return location;
+    }
+
+    private JPanel mkEquipPanel(Equipment equip) {
         JPanel currPanel = new JPanel();
-        JButton currButton = new JButton(name);
+        JButton currButton = new JButton(equip.toString());
         currButton.setOpaque(true);
         //currButton.setBorderPainted(false);
-        switch (type) {
-            case GREEN:
+        switch (equip.getType()) {
+            case Equipment.NOT_SCANNED:
+                currButton.setBackground(Color.red);
+                break;
+            case Equipment.GREEN:
                 currButton.setBackground(Color.GREEN);
                 break;
-            case YELLOW:
+            case Equipment.YELLOW:
                 currButton.setBackground(Color.YELLOW);
                 break;
-            case FLASHING_BLUE:
+            case Equipment.FLASHING_BLUE:
                 currButton.setBackground(Color.BLUE);
                 break;
-            case DELETED:
-                return equipment.size();
         }
 
         currPanel.add(currButton);
-        equipment.add(currPanel);
-        return equipment.size();
+        return currPanel;
     }
 
     public void setVisible(boolean visibility) {
         //frame.pack();
-
+        ArrayList<Equipment> equipment = location.getEquipment();
         if (visibility) {
             JPanel panel = new JPanel();
             panel.setLayout(new GridBagLayout());
@@ -88,10 +88,14 @@ public class EquipmentListing extends JFrame {
             gbc.weighty = 1.0 / equipment.size();
             //gbc.anchor = GridBagConstraints.CENTER;
 
-            for (JPanel equip : equipment) {
-                System.out.println( ((JButton) equip.getComponents()[0]).getText() );
+            for (Equipment equip : equipment) {
+                System.out.println(equip);
                 gbc.gridy = count;
-                panel.add(equip, gbc);
+
+
+                panel.add(mkEquipPanel(equip), gbc);
+
+
                 count++;
                 //TODO: Add handler for button
             }
@@ -111,8 +115,6 @@ public class EquipmentListing extends JFrame {
 
 
     public void clear() {
-        equipment.clear();
         frame.getContentPane().removeAll();
     }
-
 }
