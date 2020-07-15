@@ -19,6 +19,8 @@ public class EquipmentListing extends JFrame {
 
     private String location;
     private ArrayList<JPanel> equipment;
+    int headerHeight;
+
 
     public EquipmentListing(String location) {
         super();
@@ -34,8 +36,6 @@ public class EquipmentListing extends JFrame {
         frame.setUndecorated(true);
         frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setVisible(false);
 
         JPanel header = new JPanel();
         JButton menu = new JButton("Main Menu");
@@ -45,6 +45,9 @@ public class EquipmentListing extends JFrame {
         header.add(newLoction);
         header.add(undo);
         frame.add(header);
+        frame.setVisible(true);
+        frame.setVisible(false);
+        headerHeight = header.getHeight();
 
     }
 
@@ -80,7 +83,10 @@ public class EquipmentListing extends JFrame {
                 //TODO: Add handler for button
             }
             JScrollPane scrollPane = new JScrollPane(panel);
-            scrollPane.setPreferredSize(frame.getSize());
+
+            Dimension newSize = frame.getSize();
+            newSize.setSize(newSize.getWidth(), newSize.getHeight() - headerHeight);
+            scrollPane.setPreferredSize(newSize);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
             frame.add(scrollPane);

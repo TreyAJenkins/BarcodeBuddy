@@ -76,19 +76,19 @@ public class BarcodeBuddy {
     public static void main(String[] args) {
 
         Prompt prompt = new Prompt();
-
         EquipmentListing equipmentListing = new EquipmentListing("Location1");
+
 
         for (int i = 0; i < 16; i++) {
             equipmentListing.addEquipment("Sample " + i, 0);
         }
         equipmentListing.setVisible(true);
 
-
-        //while (isRunning) {
-        //    mainMenu(prompt);
-        //}
-
+/*
+        while (isRunning) {
+            mainMenu(prompt);
+        }
+*/
     }
 
 }
