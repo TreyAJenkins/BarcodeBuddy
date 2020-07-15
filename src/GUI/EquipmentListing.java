@@ -54,11 +54,24 @@ public class EquipmentListing extends JFrame {
     public int addEquipment(String name, int type) {
         JPanel currPanel = new JPanel();
         JButton currButton = new JButton(name);
+        currButton.setOpaque(true);
+        //currButton.setBorderPainted(false);
+        switch (type) {
+            case GREEN:
+                currButton.setBackground(Color.GREEN);
+                break;
+            case YELLOW:
+                currButton.setBackground(Color.YELLOW);
+                break;
+            case FLASHING_BLUE:
+                currButton.setBackground(Color.BLUE);
+                break;
+            case DELETED:
+                return equipment.size();
+        }
 
-        //TODO: implement type
         currPanel.add(currButton);
         equipment.add(currPanel);
-
         return equipment.size();
     }
 
@@ -73,7 +86,7 @@ public class EquipmentListing extends JFrame {
             int count = 0;
 
             gbc.weighty = 1.0 / equipment.size();
-            gbc.anchor = GridBagConstraints.CENTER;
+            //gbc.anchor = GridBagConstraints.CENTER;
 
             for (JPanel equip : equipment) {
                 System.out.println( ((JButton) equip.getComponents()[0]).getText() );
@@ -85,9 +98,10 @@ public class EquipmentListing extends JFrame {
             JScrollPane scrollPane = new JScrollPane(panel);
 
             Dimension newSize = frame.getSize();
-            newSize.setSize(newSize.getWidth(), newSize.getHeight() - headerHeight);
+            newSize.setSize(frame.getWidth(), newSize.getHeight() - headerHeight);
             scrollPane.setPreferredSize(newSize);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            System.out.println(scrollPane.getSize());
 
             frame.add(scrollPane);
         }
