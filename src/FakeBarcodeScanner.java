@@ -2,21 +2,19 @@ import java.util.Scanner;
 
 public class FakeBarcodeScanner extends BarcodeScanner {
 
-    private Scanner scanner;
+    private String scan;
 
-    public FakeBarcodeScanner() {
-        scanner = new Scanner(System.in);
+    public FakeBarcodeScanner(String scan) {
+        this.scan = scan;
     }
 
     @Override
     public String scan() {
-        System.out.print("Enter barcode: ");
-        return scanner.nextLine();
+        return scan;
     }
 
     @Override
     public void close() {
-        super.close();
-        scanner.close();
+        scan = null;
     }
 }

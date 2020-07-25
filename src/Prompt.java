@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class Prompt extends JFrame {
@@ -10,25 +11,34 @@ public class Prompt extends JFrame {
     private boolean buttonClicked = false;
     private int buttonSelected = 0;
 
-
+    /**
+     * Prompts
+     */
     public Prompt() {
-        super();
-
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setPreferredSize(new Dimension(328, 240));
-        frame.setUndecorated(true);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setVisible(false);
+        super(); // We need a superhero to save us from this code
+        frame = new JFrame(); // make something new
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // make it go away when we abandon it
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // dont do whatever this did
+        //frame.setPreferredSize(new Dimension(328, 240)); // set a size
+        frame.setPreferredSize(new Dimension(240, 328)); // set a size
+        frame.setUndecorated(true); // no decorations
+        frame.pack(); // pack it
+        frame.setLocationRelativeTo(null); // give it no sense of location
+        frame.setVisible(true); // let's see it
+        frame.setVisible(false); // never mind
 
     }
 
-    public void setVisible(boolean visibility) {
+    public void setVisiblity(boolean visibility) {
         //frame.pack();
+        System.out.println("Visibility: " + visibility);
         frame.setVisible(visibility);
+        if (visibility) {
+            frame.toFront();
+        } else {
+            frame.toBack();
+        }
+        frame.repaint();
     }
 
     public void prompt(String promptText, String buttonText) {
@@ -72,7 +82,7 @@ public class Prompt extends JFrame {
         button.setFocusPainted(false);
 
         frame.add(panel);
-        this.setVisible(true);
+        setVisiblity(true);
 
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -88,12 +98,14 @@ public class Prompt extends JFrame {
             }
 
         }
+        buttonClicked = false;
 
-        this.clear();
-        this.setVisible(false);
+        clear();
+        setVisiblity(false);
     }
 
     public int menu(ArrayList<String> objects) {
+        clear();
         buttonClicked = false;
         buttonSelected = 0;
         JPanel panel = new JPanel();
@@ -137,7 +149,7 @@ public class Prompt extends JFrame {
         }
 
         frame.add(panel);
-        this.setVisible(true);
+        setVisiblity(true);
 
 
 
@@ -150,14 +162,23 @@ public class Prompt extends JFrame {
 
         }
 
-        this.clear();
-        this.setVisible(false);
+        clear();
+        setVisiblity(false);
 
         return buttonSelected;
     }
 
+    public void suicide() {
+        //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        frame.dispose();
+    }
+
+
     public void clear() {
         frame.getContentPane().removeAll();
+        setVisiblity(false);
     }
+
+
 
 }

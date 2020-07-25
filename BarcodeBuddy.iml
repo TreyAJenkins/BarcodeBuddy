@@ -29,5 +29,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="org.apache.commons:commons-csv:1.4" level="project" />
   </component>
 </module>

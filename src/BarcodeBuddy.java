@@ -1,69 +1,33 @@
+import com.sun.xml.internal.ws.util.InjectionPlan;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class BarcodeBuddy {
 
     private static ArrayList<Location> locations = new ArrayList<>();
     private static boolean isRunning = true;
-    private static Prompt prompt;
-    private static EquipmentListing equipmentListing;
 
+    public static ArrayList<Equipment> sessionScans = new ArrayList<>();
 
-    private static void scanMode(Prompt prompt) {
-        prompt.clear();
-
-        //BarcodeScanner scanner = new BarcodeScanner();
-        BarcodeScanner scanner = new FakeBarcodeScanner();
-        prompt.prompt("Please scan a location barcode", "Open scanner");
-        String scanned = scanner.scan();
-        // TODO: Check if scanned is empty
-
-        int index = 0;
-        if (locations.contains(scanned)) {
-            index = locations.indexOf(scanned);
-            System.out.println("Location already in DB");
-        } else {
-            System.out.println("New Location");
-            locations.add(new Location(scanned));
-            index = locations.size()-1;
-        }
-
-        System.out.println(locations);
-        System.out.println(locations.get(index).getLocation());
-
-        prompt.clear();
-        prompt.prompt("Location scanned successfully", "Continue");
-        //TODO: UI: Show equipment at location
-
-        //for (Equipment equip : locations.get(index).getEquipment()) {
-        //    System.out.println(equip);
-        //}
-
-        //TODO Wait for button press on GPIO
-        scanned = scanner.scan();
-        //TODO: Check if scanned is empty
-
-        locations.get(index).addEquipment(new Equipment(scanned));
-        int eqindex = locations.get(index).getEquipment().size()-1;
-        locations.get(index).getEquipment().get(eqindex).scanned();
-
-        
-
-        scanner.close();
-    }
-
-    public static void mainMenu(Prompt prompt) {
+    public static void mainMenu() {
+        Prompt prompt = new Prompt();
         prompt.clear();
         ArrayList<String> menuItems = new ArrayList<String>();
         menuItems.add("Transfer Data");
         menuItems.add("Scanning Mode");
         menuItems.add("Shutdown");
+        prompt.prompt("Main MENU!!", "Done");
         int response = prompt.menu(menuItems);
+        System.out.println("Response: " + response);
         switch (response) {
             case 0:
                 // Enter transfer mode
                 break;
             case 1:
-                scanMode(prompt);
+                ScanMode scanMode = new ScanMode(locations);
+                scanMode.entrypoint();
                 // Enter scanning mode
                 break;
             case 2:
@@ -75,22 +39,45 @@ public class BarcodeBuddy {
 
     public static void main(String[] args) {
 
-        prompt = new Prompt();
-        equipmentListing = new EquipmentListing();
+        Ingest ingest = new Ingest(new File("data.csv"));
 
-        Location location = new Location("Test Location");
+        try {
+            locations = ingest.parse();
+        } catch (IOException e) {
+            Prompt prompt = new Prompt();
+            prompt.clear();
+            prompt.prompt("Error loading data.csv", "Continue");
+            prompt.clear();
+        }
+
+
+        /*Location location = new Location("Test Location");
         equipmentListing.setLocation(location);
 
         for (int i = 0; i < 16; i++) {
             location.addEquipment(new Equipment("Sample " + i, i % 4));
         }
-        equipmentListing.setVisible(true);
+        */
 
-/*
-        while (isRunning) {
-            mainMenu(prompt);
-        }
-*/
+        /*Ingest ingest = new Ingest(new File("data.csv"));
+        try {
+            locations = ingest.parse();
+            System.out.println(locations);
+
+            for (Location loc : locations) {
+                System.out.println(loc);
+                for (Equipment equip : loc.getEquipment()) {
+                    System.out.println("\t" + equip);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        while (isRunning) mainMenu();
+
+
     }
 
 }

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class EquipmentListing extends JFrame {
@@ -12,11 +13,34 @@ public class EquipmentListing extends JFrame {
     private boolean buttonClicked = false;
     private int buttonSelected = 0;
 
-    private Location location;
-    int headerHeight;
+    private JPanel header;
 
-    public EquipmentListing() {
+    private Location location;
+    private int headerHeight;
+    private JButton undo;
+
+    public static final int IDLE = 0;
+    public static final int RETURN_MENU = 1;
+    public static final int RETURN_SCAN = 2;
+    public static final int RETURN_UNDO = 3;
+    private int state;
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public void setUndo(boolean undoEnabled) {
+        undo.setEnabled(undoEnabled);
+    }
+
+    public EquipmentListing(boolean noScanButton) {
         super();
+
+        this.state = IDLE;
 
         //this.location = location;
         //this.equipment = new ArrayList<JPanel>();
@@ -25,19 +49,45 @@ public class EquipmentListing extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new FlowLayout());
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setPreferredSize(new Dimension(328, 240));
+        //frame.setPreferredSize(new Dimension(328, 240));
+        frame.setPreferredSize(new Dimension(240, 328));
         frame.setUndecorated(true);
         frame.pack();
         frame.setLocationRelativeTo(null);
 
         FlowLayout layout = new FlowLayout();
         layout.setVgap(0);
-        JPanel header = new JPanel();
+        header = new JPanel();
         header.setLayout(layout);
         JButton scan = new JButton("Scan");
         JButton menu = new JButton("Main Menu");
-        JButton undo = new JButton("Undo");
-        header.add(scan);
+        undo = new JButton("Undo");
+        undo.setEnabled(false);
+
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Undo button");
+                setState(RETURN_UNDO);
+            }
+        });
+
+        scan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setState(RETURN_SCAN);
+            }
+        });
+
+        menu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setState(RETURN_MENU);
+                suicide();
+            }
+        });
+
+        if (!noScanButton) header.add(scan);
         header.add(menu);
         header.add(undo);
         frame.add(header);
@@ -45,6 +95,11 @@ public class EquipmentListing extends JFrame {
         frame.setVisible(false);
         headerHeight = header.getHeight();
 
+    }
+
+    public void suicide() {
+        //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        frame.dispose();
     }
 
     public void setLocation(Location location) {
@@ -70,21 +125,27 @@ public class EquipmentListing extends JFrame {
             case Equipment.YELLOW:
                 currPanel.setBackground(Color.YELLOW);
                 break;
-            case Equipment.FLASHING_BLUE:
+            case Equipment.BLUE:
                 currPanel.setBackground(Color.BLUE);
                 break;
+            case Equipment.FLASHING_ORANGE:
+                currPanel.setBackground(Color.ORANGE);
+            case Equipment.DELETED:
+                return null;
+
         }
 
         currPanel.add(currButton);
         return currPanel;
     }
 
-    public void setVisible(boolean visibility) {
+    public void setVisibility(boolean visibility) {
         //frame.pack();
         JLabel label = new JLabel(location.getLocation());
         frame.add(label);
         ArrayList<Equipment> equipment = location.getEquipment();
         if (visibility) {
+            clear();
             JPanel panel = new JPanel();
             panel.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
@@ -98,12 +159,13 @@ public class EquipmentListing extends JFrame {
                 System.out.println(equip);
                 gbc.gridy = count;
 
+                JPanel tmpPanel = mkEquipPanel(equip);
+                if (tmpPanel != null) {
+                    panel.add(tmpPanel, gbc);
+                    count++;
+                    //TODO: Add handler for button
 
-                panel.add(mkEquipPanel(equip), gbc);
-
-
-                count++;
-                //TODO: Add handler for button
+                }
             }
             JScrollPane scrollPane = new JScrollPane(panel);
 
@@ -122,5 +184,6 @@ public class EquipmentListing extends JFrame {
 
     public void clear() {
         frame.getContentPane().removeAll();
+        frame.add(header);
     }
 }

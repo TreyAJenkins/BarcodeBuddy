@@ -23,4 +23,17 @@ public class Location {
         equipment.add(equip);
     }
 
+    public static Location findElementByName(ArrayList<Location> locations, String location) {
+        for (Location loc : locations) {
+            if (loc.getLocation().equals(location)) {
+                return loc;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return location;
+    }
 }
